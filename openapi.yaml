@@ -3,6 +3,12 @@ info:
   title: The SpatioTemporal Asset Catalog API - Sort
   description: Adds Parameter to control sorting of returns results.
   version: 1.0.0-rc.1
+  contact:
+    name: STAC Specification
+    url: 'http://stacspec.org'
+  license:
+    name: Apache License 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
 paths: {}
 components:
   parameters:

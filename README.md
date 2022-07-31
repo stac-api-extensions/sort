@@ -1,146 +1,86 @@
-<!--lint disable no-html-->
-<img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="700"/>
+# STAC API - Sort Fragment
 
-# STAC API
+- **OpenAPI specification:** [openapi.yaml](openapi.yaml)
+- **Conformance Classes:** 
+  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0-rc.1/item-search#sort>
+  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.1/ogcapi-features#sort>
+- **Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/README.md#maturity-classification):** Candidate
+- **Dependents:**
+  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/item-search)
+  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/ogcapi-features)
+ 
+This defines a new parameter, `sortby`, that allows the user to define fields by which to sort results. 
+Only string, numeric, and datetime attributes of Item (`id` and `collection` only) or Item Properties (any attributes) 
+may be used to sort results.  It is not required that implementations support sorting over all attributes, but 
+implementations should return an error when attempting to sort over a field that does not support sorting. 
 
-- [STAC API](#stac-api)
-  - [Releases (stable)](#releases-stable)
-  - [Development (unstable)](#development-unstable)
-  - [About](#about)
-  - [Stability Note](#stability-note)
-  - [Maturity Classification](#maturity-classification)
-  - [Communication](#communication)
-  - [In this repository](#in-this-repository)
-  - [Contributing](#contributing)
+This fragment may be bound to either or both of 
+[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/item-search) (`/search` endpoint) or
+[STAC API - Features](https://github.com/radiantearth/stac-api-spec/ogcapi-features) (`/collections/{collectionId}/items` endpoint) by
+advertising the relevant conformance class. 
 
-## Releases (stable)
+Fields may be sorted in ascending or descending order.  The syntax between GET requests and POST requests with a JSON 
+body vary.  The `sortby` value is an array, so multiple sort fields can be defined which will be used to sort 
+the data in the order provided (e.g., first by `datetime`, then by `eo:cloud_cover`).
 
-- [v1.0.0-rc.1](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1) (latest)
-- [v1.0.0-beta.5](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-beta.5)
-- [v1.0.0-beta.4](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-beta.4)
-- [v1.0.0-beta.3](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-beta.3)
-- [v1.0.0-beta.2](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-beta.2)
-- [v1.0.0-beta.1](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-beta.1)
-- [v0.9.0](https://github.com/radiantearth/stac-api-spec/tree/v0.9.0)
+**NOTE**: *This fragment may change, as our goal is to align with OGC API functionality, and sorting is currently being 
+worked on as part of OGC API - Records, see [this issue](https://github.com/opengeospatial/ogcapi-records/issues/22) 
+for the latest discussion.*
 
-## Development (unstable)
+## HTTP GET (or POST Form)
 
-The [main](https://github.com/radiantearth/stac-api-spec/tree/main) branch in GitHub is
-used for active development and may be unstable. Implementers should reference one of
-the release branches above for a stable version of the specification.
-**NOTE**: This means that if you are on github.com/radiantearth/stac-api-spec then you are looking at an unreleased,
-unstable version of the specification. Use the first listed link on releases to read the current released, stable version
-of the spec.
-## About
+When calling a relevant endpoint using GET (or POST with `Content-Type: application/x-www-form-urlencoded` or 
+`Content-Type: multipart/form-data)`, a single parameter `sortby` with a comma-separated list of item field names must 
+be provided. The field names may be prefixed with either "+" for ascending, or "-" for descending.  If no sign is 
+provided before the field name, it will be assumed to be "+". 
 
-The SpatioTemporal Asset Catalog (STAC) family of specifications aim to standardize the way geospatial asset metadata is structured and queried.
-A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain space and 
-time. The core STAC specifications live in the GitHub repository [radiantearth/stac-spec](https://github.com/radiantearth/stac-spec).
+Examples of `sortby` parameter:
 
-A STAC API is the dynamic version of a SpatioTemporal Asset Catalog. It returns a STAC [Catalog](stac-spec/catalog-spec/catalog-spec.md), 
-[Collection](stac-spec/collection-spec/collection-spec.md), [Item](stac-spec/item-spec/item-spec.md), 
-or a STAC API [ItemCollection](fragments/itemcollection/README.md), depending on the endpoint.
-Catalog and Collection objects are JSON, while Item and ItemCollection objects are GeoJSON-compliant entities with foreign members.  
-Typically, a Feature is used when returning a single Item object, and FeatureCollection when multiple Item objects (rather than a 
-JSON array of Item entities).
+1. `GET /search?sortby=properties.created`
+2. `GET /search?sortby=+properties.created`
+3. `GET /search?sortby=properties.created,-id`
+4. `GET /search?sortby=+properties.created,-id`
+5. `GET /search?sortby=-properties.eo:cloud_cover`
+    
+Note that examples 1 and 2 are symantically equivalent, as well as examples 3 and 4.
 
-The API can be implemented in compliance with the *[OGC API - Features](http://docs.opengeospatial.org/is/17-069r3/17-069r3.html)* standard 
-(OAFeat is a shorthand). In this case STAC API can be thought of as a specialized Features API 
+## HTTP POST JSON Entity
 
-to search STAC catalogs, where the features returned are STAC [Item](stac-spec/item-spec/item-spec.md) objects, 
-that have common properties, links to their assets and geometries that represent the footprints of the geospatial assets.
+When calling the relevant endpoint using POST with`Content-Type: application/json`, this adds an attribute `sortby` with 
+an object value to the core JSON search request body.
 
-The specification for STAC API is provided as files that follow the [OpenAPI](http://openapis.org/) 3.0 specification, 
-rendered online into HTML at <https://api.stacspec.org/v1.0.0-rc.1>, in addition to human-readable documentation.  
+The syntax for the `sortby` attribute is:
 
-## Stability Note
+```json
+{
+    "sortby": [
+        {
+            "field": "<property_name>",
+            "direction": "<direction>"
+        }
+    ]
+}
+```
 
-This specification has evolved over the past couple years, and is used in production in a variety of deployments. It is 
-currently in a 'beta' state, with no major changes anticipated. For 1.0.0-rc.1, we remain fully aligned with [OGC API - 
-Features](http://docs.opengeospatial.org/is/17-069r3/17-069r3.html) Version 1.0, and we are working to stay aligned
-as the additional OGC API components mature. This may result in minor changes as things evolve. The STAC API 
-specification follows [Semantic Versioning](https://semver.org/), so once 1.0.0 is reached any breaking change 
-will require the spec to go to 2.0.0.
-
-## Maturity Classification
-
-Conformance classes and extensions are meant to evolve to maturity, and thus may be in different states
-in terms of stability and number of implementations. All extensions must include a 
-maturity classification, so that STAC API spec users can easily get a sense of how much they can count
-on the extension. 
-
-| Maturity Classification | Min Impl # | Description                                                                                                                                                | Stability                                                                                                 |
-| ----------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Proposal                | 0          | An idea put forward by a community member to gather feedback                                                                                               | Not stable - breaking changes almost guaranteed as implementers try out the idea.                         |
-| Pilot                   | 1          | Idea is fleshed out, with examples and a JSON schema, and implemented in one or more catalogs. Additional implementations encouraged to help give feedback | Approaching stability - breaking changes are not anticipated but can easily come from additional feedback |
-| Candidate               | 3          | A number of implementers are using it and are standing behind it as a solid extension. Can generally count on an extension at this maturity level          | Mostly stable, breaking changes require a new version and minor changes are unlikely.                     |
-| Stable                  | 6          | Highest current level of maturity. The community of extension maintainers commits to a STAC review process for any changes, which are not made lightly.    | Completely stable, all changes require a new version number and review process.                           |
-| Deprecated              | N/A        | A previous extension that has likely been superseded by a newer one or did not work out for some reason.                                                   | Will not be updated and may be removed in an upcoming major release.                                      |
-
-Maturity mostly comes through diverse implementations, so the minimum number of implementations
-column is the main gating function for an extension to mature. But extension authors can also
-choose to hold back the maturity advancement if they don't feel they are yet ready to commit to
-the less breaking changes of the next level.
-
-A 'mature' classification level will likely be added once there are extensions that have been 
-stable for over a year and are used in twenty or more implementations.
-
-## Communication
-
-For any questions feel free to jump on our [gitter channel](https://gitter.im/SpatioTemporal-Asset-Catalog/Lobby) or email 
-our [google group](https://groups.google.com/forum/#!forum/stac-spec). The majority of communication about the evolution of 
-the specification takes place in the [issue tracker](https://github.com/radiantearth/stac-api-spec/issues) and in 
-[pull requests](https://github.com/radiantearth/stac-api-spec/pulls).
-
-## In this repository
-
-The **[Overview](overview.md)** document describes all the various parts of the STAC API and how they fit together.
-
-**STAC API - Core Specification:**
-The *[core](core/)* folder describes the core STAC API specification that enables browsing catalogs and 
-retrieving the API capabilities. This includes the OpenAPI schemas for STAC Item, Catalog and Collection objects.
-
-**STAC API - Collections:**
-The *[collections](collections)* folder describes how a STAC API Catalog can advertise the Collections it contains.
-
-**STAC API - Features:**
-The *[ogcapi-features](ogcapi-features)* folder describes how a STAC API can fully implement [OGC API - 
-Features](http://docs.opengeospatial.org/is/17-069r3/17-069r3.html) to expose individual `items` endpoints for search of
-each STAC collection. It also includes extensions that can be used to further enhance OAFeat.
-
-**STAC API - Item Search Specification:**
-The *[item-search](item-search)* folder contains the Item Search specification, which enables 
-cross-collection search of STAC Item objects at a `search` endpoint, as well as a number of extensions. 
-
-**STAC API - Children:**
-The *[children](children)* folder describes how a STAC API Catalog can advertise the children (child catalogs or child collections)
-it contains.
-
-**STAC API - Browseable:**
-The *[browseable](browseable)* folder describes how a STAC API Catalog can advertise that all Items can be accessed
-by following through `child` and `item` link relations.
-
-**Extensions:**
-The *[extensions](extensions.md) document* describes how STAC incubates new functionality, and it links to the existing 
-extensions that can be added to enrich the functionality of a STAC API. Each has an OpenAPI yaml, but some of the yaml
-documents live as fragments in the [fragments/](fragments/) folder.
-
-**Fragments:**
-The *[fragments/](fragments/)* folder contains re-usable building blocks to be used in a STAC API, including common OpenAPI 
-schemas and parameters for behavior like sorting and filtering. Most all of them are compatible with 
-OGC API - Features, and the plan is to fully align the relevant functionality and have it be useful for all OAFeat implementations.
-OpenAPI YAML documents are provided for each extension with additional documentation and examples provided in a README.
-
-**STAC Specification:** This repository includes a '[sub-module](https://git-scm.com/book/en/v2/Git-Tools-Submodules)', which
-is a copy of the [STAC specification](stac-spec/) tagged at the latest stable version.
-Sub-modules aren't checked out by default, so to get the directory populated
-either use `git submodule update --init --recursive` if you've already cloned it,
-or clone from the start with `git clone --recursive git@github.com:radiantearth/stac-api-spec.git`. 
-
-**Implementation Recommendations:** Recommendations for implementing a STAC API may be found [here](implementation.md). 
-These are mostly concerns that apply to an entire API implementation and are not part of the specification itself.
-
-## Contributing
-
-Anyone building software that catalogs imagery or other geospatial assets is welcome to collaborate.
-Beforehand, please review our [guidelines for contributions and development process](CONTRIBUTING.md).
+```json
+{
+    "sortby": [
+        {
+            "field": "properties.created",
+            "direction": "asc"
+        },
+        {
+            "field": "properties.eo:cloud_cover",
+            "direction": "desc"
+        },
+        {
+            "field": "id",
+            "direction": "desc"
+        },
+        {
+            "field": "collection",
+            "direction": "desc"
+        }
+    ]
+}
+```
