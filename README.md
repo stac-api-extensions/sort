@@ -5,7 +5,7 @@
   - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0-rc.1/item-search#sort>
   - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.1/ogcapi-features#sort>
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/README.md#maturity-classification):** Candidate
-- **Dependents:**
+- **Dependencies:**
   - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/item-search)
   - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/ogcapi-features)
  
