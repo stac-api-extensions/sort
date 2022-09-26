@@ -6,8 +6,8 @@
   - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.1/ogcapi-features#sort>
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/README.md#maturity-classification):** Candidate
 - **Dependencies:**
-  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/item-search)
-  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/ogcapi-features)
+  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search)
+  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search)
  
 This defines a new parameter, `sortby`, that allows the user to define fields by which to sort results. 
 Only string, numeric, and datetime attributes of Item (`id` and `collection` only) or Item Properties (any attributes) 
@@ -15,8 +15,8 @@ may be used to sort results.  It is not required that implementations support so
 implementations should return an error when attempting to sort over a field that does not support sorting. 
 
 This fragment may be bound to either or both of 
-[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/item-search) (`/search` endpoint) or
-[STAC API - Features](https://github.com/radiantearth/stac-api-spec/ogcapi-features) (`/collections/{collectionId}/items` endpoint) by
+[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search) (`/search` endpoint) or
+[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/ogcapi-features) (`/collections/{collectionId}/items` endpoint) by
 advertising the relevant conformance class. 
 
 Fields may be sorted in ascending or descending order.  The syntax between GET requests and POST requests with a JSON 
