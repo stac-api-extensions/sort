@@ -1,4 +1,4 @@
-# STAC API - Sort Fragment
+# STAC API - Sort Extension
 
 - **OpenAPI specification:** [openapi.yaml](openapi.yaml)
 - **Conformance Classes:** 
