@@ -2,12 +2,12 @@
 
 - **OpenAPI specification:** [openapi.yaml](openapi.yaml)
 - **Conformance Classes:** 
-  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0-rc.1/item-search#sort>
-  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.1/ogcapi-features#sort>
+  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0-rc.2/item-search#sort>
+  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.2/ogcapi-features#sort>
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-api-spec/blob/main/README.md#maturity-classification):** Candidate
 - **Dependencies:**
-  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search)
-  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search)
+  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search)
+  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search)
  
 This specification defines a new parameter, `sortby`, that allows the user to define the fields by which
 to sort results. 
@@ -24,8 +24,8 @@ fields in Item Properties to be prefixed with `properties.` or not, or support u
 name, e.g., `properties.datetime` or `datetime`.
 
 Sort behavior may be bound to either or both of 
-[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/item-search) (`/search` endpoint) or
-[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1/ogcapi-features)
+[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search) (`/search` endpoint) or
+[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/ogcapi-features)
 (`/collections/{collectionId}/items` endpoint) by advertising the relevant conformance class. 
 
 Fields may be sorted in ascending or descending order.  The syntax between GET requests and POST requests with a JSON 
