@@ -2,7 +2,7 @@
 
 - [STAC API - Sort Extension Specification](#stac-api---sort-extension-specification)
   - [Overview](#overview)
-  - [HTTP GET (or POST Form)](#http-get-or-post-form)
+  - [HTTP GET](#http-get)
   - [HTTP POST JSON Entity](#http-post-json-entity)
 
 ## Overview
@@ -10,13 +10,13 @@
 - **Title:** Sort
 - **OpenAPI specification:** [openapi.yaml](openapi.yaml)
 - **Conformance Classes:**
-  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0-rc.2/item-search#sort>
-  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0-rc.2/ogcapi-features#sort>
+  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0/item-search#sort>
+  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0/ogcapi-features#sort>
 - **Scope:** STAC API - Features, STAC API - Item Search
-- **[Extension Maturity Classification](https://github.com/radiantearth/stac-api-spec/tree/main/README.md#maturity-classification):** Candidate
+- **[Extension Maturity Classification](https://github.com/radiantearth/stac-api-spec/tree/main/README.md#maturity-classification):** Stable
 - **Dependencies:**
-  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search)
-  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search)
+  - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search)
+  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search)
 - **Owner**: @philvarner
 
 This specification defines a new parameter, `sortby`, that allows the user to define the fields by which
@@ -34,8 +34,8 @@ fields in Item Properties to be prefixed with `properties.` or not, or support u
 name, e.g., `properties.datetime` or `datetime`.
 
 Sort behavior may be bound to either or both of
-[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/item-search) (`/search` endpoint) or
-[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.2/ogcapi-features)
+[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search) (`/search` endpoint) or
+[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/ogcapi-features)
 (`/collections/{collectionId}/items` endpoint) by advertising the relevant conformance class.
 
 Fields may be sorted in ascending or descending order.  The syntax between GET requests and POST requests with a JSON
@@ -46,12 +46,12 @@ the data in the order provided (e.g., first by `datetime`, then by `eo:cloud_cov
 worked on as part of OGC API - Records, see [this issue](https://github.com/opengeospatial/ogcapi-records/issues/22)
 for the latest discussion.*
 
-## HTTP GET (or POST Form)
+## HTTP GET
 
-When calling a relevant endpoint using GET (or POST with `Content-Type: application/x-www-form-urlencoded` or
-`Content-Type: multipart/form-data)`, a single parameter `sortby` with a comma-separated list of item field names must
+When calling a relevant endpoint using GET, a single parameter `sortby` with a comma-separated list of item field names must
 be provided. The field names may be prefixed with either "+" for ascending, or "-" for descending.  If no sign is
-provided before the field name, it will be assumed to be "+".
+provided before the field name, it will be assumed to be "+". Note that `+` is used commonly
+by URL encoding as a space, so some tools may require escaping this literal `+` with a URL encoding of `%2B`.  
 
 Examples of `sortby` parameter:
 
