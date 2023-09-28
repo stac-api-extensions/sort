@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0] - 2023-09-28
 
-No additional changes.
+### Changed
+
+- Updated maturity to Stable.
 
 ## [v1.0.0-rc.2] - 2022-11-01
 
