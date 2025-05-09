@@ -1,5 +1,5 @@
 {
-    "name": "stac-api-sort-extnsion-spec",
+    "name": "stac-api-sort-extension-spec",
     "version": "1.0.0-rc.2",
     "description": "STAC API helpers to check the API spec.",
     "repository": "https://github.com/stac-api-extensions/sort",
