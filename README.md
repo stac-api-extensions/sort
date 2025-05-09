@@ -4,6 +4,7 @@
   - [Overview](#overview)
   - [HTTP GET](#http-get)
   - [HTTP POST JSON Entity](#http-post-json-entity)
+  - [Sortables](#sortables)
 
 ## Overview
 
@@ -12,11 +13,13 @@
 - **Conformance Classes:**
   - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0/item-search#sort>
   - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0/ogcapi-features#sort>
-- **Scope:** STAC API - Features, STAC API - Item Search
+  - **STAC API - Collection Search** binding: <https://api.stacspec.org/v1.0.0-rc.1/collection-search#sort>
+- **Scope:** STAC API - Features, STAC API - Item Search, STAC API - Collection Search
 - **[Extension Maturity Classification](https://github.com/radiantearth/stac-api-spec/tree/main/README.md#maturity-classification):** Stable
 - **Dependencies:**
   - [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search)
-  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search)
+  - [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/ogcapi-features)
+  - [STAC API - Collection Search](https://github.com/stac-api-extensions/collection-search/tree/v1.0.0-rc.1)
 - **Owner**: @philvarner
 
 This specification defines a new parameter, `sortby`, that allows the user to define the fields by which
@@ -25,26 +28,23 @@ Only string, numeric, and datetime attributes of Item (`id` and `collection` onl
 may be used to sort results.  
 
 It is not required that implementations support sorting over all attributes, but
-implementations should return a 400 Bad Request status code when attempting to sort over a field name that does
-not support sorting.
-This specification does not yet require the implementation of an "-ables" endpoint (like CQL2 does for queryables)
-that defines the names of the
-fields that can be sorted over, so implementations must provide this out-of-band. Implementers may choose to require
-fields in Item Properties to be prefixed with `properties.` or not, or support use of both the prefixed and non-prefixed
-name, e.g., `properties.datetime` or `datetime`.
+implementations should either implement Sortables or just return a 400 Bad Request status code
+when attempting to sort over a field name that does not support sorting.
+Implementers may choose to require fields in Item Properties to be prefixed with `properties.` or not,
+or support use of both the prefixed and non-prefixed name, e.g., `properties.datetime` or `datetime`.
 
-Sort behavior may be bound to either or both of
-[STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search) (`/search` endpoint) or
-[STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/ogcapi-features)
-(`/collections/{collectionId}/items` endpoint) by advertising the relevant conformance class.
+Sort behavior may be bound to any of the following endpoints by advertising the relevant conformance class:
+
+- [STAC API - Item Search](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/item-search)
+  (`/search` endpoint),
+- [STAC API - Features](https://github.com/radiantearth/stac-api-spec/tree/v1.0.0/ogcapi-features)
+  (`/collections/{collectionId}/items` endpoint)
+- [STAC API - Collection Search](https://github.com/stac-api-extensions/collection-search/tree/v1.0.0-rc.1)
+  (`/collections` endpoint)
 
 Fields may be sorted in ascending or descending order.  The syntax between GET requests and POST requests with a JSON
 body vary.  The `sortby` value is an array, so multiple sort fields can be defined which will be used to sort
 the data in the order provided (e.g., first by `datetime`, then by `eo:cloud_cover`).
-
-**NOTE**: *This specification may change, as our goal is to align with OGC API functionality, and sorting is currently being
-worked on as part of OGC API - Records, see [this issue](https://github.com/opengeospatial/ogcapi-records/issues/22)
-for the latest discussion.*
 
 ## HTTP GET
 
@@ -103,3 +103,35 @@ The syntax for the `sortby` attribute is:
     ]
 }
 ```
+
+## Sortables
+
+Additional endpoints that provide so called "Sortables" support clients that want to discover the list of resource
+properties with their types and constraints that may be used to sort resources.
+
+These Sortables endpoints return lists of properties (or aliases) that can be used in the `sortby` parameter.
+It returns a JSON Schema that defines the properties allowed in `sortby`.
+The precise definition of this can be found in the
+[OGC API - Features - Part 5: Schemas](https://portal.ogc.org/files/108199#rc_sortables).
+
+All Sortables endpoints SHALL be referenced with a link with the link relation type
+`http://www.opengis.net/def/rel/ogc/1.0/sortables`.
+
+| Sortables Endpoint                                          | Endpoint linking to the Sortables Endpoint | Conformance class                                                  | Applicable `sortby` endpoints           |
+| ----------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------ | --------------------------------------- |
+| `GET /sortables`                                            | `GET /`                                    | `https://api.stacspec.org/v1.0.0/item-search#sortables`            | `GET /search` and `POST /search`        |
+| `GET /collections/{collectionId}/sortables`                 | `GET /collections/{collectionId}`          | `http://www.opengis.net/spec/ogcapi-features-5/1.0/conf/sortables` | `GET /collections/{collectionId}/items` |
+| `GET /...` (*Endpoint name to be chosen by implementation*) | `GET /collections`                         | `https://api.stacspec.org/v1.0.0-rc.1/collection-search#sortables` | `GET /collections/{collectionId}/items` |
+
+An example for a link to the sortables endpoint could be:
+
+```json
+{
+    "href": "https://stac.example/sortables",
+    "type": "application/schema+json",
+    "rel": "http://www.opengis.net/def/rel/ogc/1.0/sortables",
+    "title": "Sortables"
+}
+```
+
+For an example of a sortables endpoint response, please see the [openapi.yaml](openapi.yaml).
