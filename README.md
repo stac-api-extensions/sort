@@ -114,6 +114,13 @@ It returns a JSON Schema that defines the properties allowed in `sortby`.
 The precise definition of this can be found in the
 [OGC API - Features - Part 5: Schemas](https://portal.ogc.org/files/108199#rc_sortables).
 
+In particular:
+
+- No property SHALL be of type "object" or "array".
+- No property SHALL be a spatial property.
+- If `additionalProperties` is not included or has the default value true, any property name is valid in a sorting expression on the collection that is evaluated by the server and the property reference SHALL evaluate to null, if the property does not exist for a resource.
+- If `additionalProperties` is set to false, property references that are not explicitly declared in the sortables schema SHALL result in a 400 response.
+
 All Sortables endpoints SHALL be referenced with a link with the link relation type
 `http://www.opengis.net/def/rel/ogc/1.0/sortables`.
 
