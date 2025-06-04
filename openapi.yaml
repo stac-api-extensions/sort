@@ -9,8 +9,113 @@ info:
   license:
     name: Apache License 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0'
-paths: {}
+tags:
+  - name: Sort Extension
+    description: |
+      An extension to the STAC API that allows sorting of results based on specified properties.
+paths:
+  /sortables:
+    get:
+      summary: Sortables
+      operationId: getSortables
+      description: |-
+        This endpoint returns a list of properties (or aliases) that can be used in the `sortby` parameter
+        for the cross-collection item search (i.e. `GET /search` and `POST /search`).
+        It returns a JSON Schema that defines the properties allowed in `sortby`.
+        The precise definition of this can be found in the OGC API - Features - Part 5: Schemas.
+      tags:
+        - Sort Extension
+      responses:
+        "200":
+          $ref: "#/components/responses/Sortables"
+        default:
+          $ref: "#/components/responses/Error"
+  /collections/{collectionId}/sortables:
+    get:
+      summary: Sortables for Item lists of a specific Collection
+      operationId: getCollectionForCollection
+      description: |-
+        This endpoint returns a list of properties (or aliases) that can be used in the `sortby` parameter
+        for the item lists of a collection (i.e. `GET /collections/{collectionId}/items`).
+        It returns a JSON Schema that defines the properties allowed in `sortby`.
+        The precise definition of this can be found in the OGC API - Features - Part 5: Schemas.
+      tags:
+        - Sort Extension
+      parameters:
+        - in: path
+          name: collectionId
+          schema:
+            type: string
+          required: true
+          description: ID of Collection
+      responses:
+        "200":
+          $ref: "#/components/responses/Sortables"
+        default:
+          $ref: "#/components/responses/Error"
 components:
+  responses:
+    Sortables:
+      description: A JSON Schema defining the properties allowed in `sortby`.
+      content:
+        application/schema+json:
+          schema:
+            type: object
+            properties:
+              $schema:
+                type: string
+                format: uri
+                enum:
+                  - https://json-schema.org/draft/2020-12/schema
+              $id:
+                type: string
+                format: uri
+              type:
+                type: string
+                enum:
+                  - object
+              properties:
+                type: object
+                additionalProperties:
+                  type: object
+                  required:
+                    - type
+                  properties:
+                    type:
+                      type: string
+                    title:
+                      type: string
+                    description:
+                      type: string
+                  additionalProperties: true
+              additionalProperties:
+                description: |-
+                  If `additionalProperties` is not included or has the default value `true`, any property name is valid in a sorting expression on the collection that is evaluated by the server and the property reference SHALL evaluate to `null`, if the property does not exist for a resource.
+
+                  If `additionalProperties` is set to `false`, property references that are not explicitly declared in the sortables schema SHALL result in a 400 response.
+                type: boolean
+                default: true
+          example:
+            $schema: https://json-schema.org/draft/2020-12/schema
+            $id: https://example.com/sortables
+            title: Sortables
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              datetime:
+                type: string
+                format: date-time
+              eo:cloud_cover:
+                type: number
+    Error:
+      description: An error occurred.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/exception"
   parameters:
     sortby:
       name: sortby
@@ -62,3 +167,14 @@ components:
           direction: asc
         - field: id
           direction: desc
+    exception:
+      type: object
+      description: |-
+        Information about the exception: an error code plus an optional description.
+      required:
+        - code
+      properties:
+        code:
+          type: string
+        description:
+          type: string
