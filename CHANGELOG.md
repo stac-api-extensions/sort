@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Sortables (e.g. endpoint `GET /sortables`)
+- Sort for Collections (i.e. Collection Search)
+
 ### Fixed
 
 - Clarify that `direction` is optional
