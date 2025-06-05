@@ -152,7 +152,6 @@ components:
         type: object
         required:
           - field
-          - direction
         properties:
           field:
             type: string
