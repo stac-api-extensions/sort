@@ -11,9 +11,9 @@
 - **Title:** Sort
 - **OpenAPI specification:** [openapi.yaml](openapi.yaml)
 - **Conformance Classes:**
-  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.0.0/item-search#sort>
-  - **STAC API - Features** binding: <https://api.stacspec.org/v1.0.0/ogcapi-features#sort>
-  - **STAC API - Collection Search** binding: <https://api.stacspec.org/v1.0.0-rc.1/collection-search#sort>
+  - **STAC API - Item Search** binding: <https://api.stacspec.org/v1.1.0/item-search#sort>
+  - **STAC API - Features** binding: <https://api.stacspec.org/v1.1.0/ogcapi-features#sort>
+  - **STAC API - Collection Search** binding: <https://api.stacspec.org/v1.1.0/collection-search#sort>
 - **Scope:** STAC API - Features, STAC API - Item Search, STAC API - Collection Search
 - **[Extension Maturity Classification](https://github.com/radiantearth/stac-api-spec/tree/main/README.md#maturity-classification):** Stable
 - **Dependencies:**
@@ -126,9 +126,9 @@ All Sortables endpoints SHALL be referenced with a link with the link relation t
 
 | Sortables Endpoint                                          | Endpoint linking to the Sortables Endpoint | Conformance class                                                  | Applicable `sortby` endpoints           |
 | ----------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------ | --------------------------------------- |
-| `GET /sortables`                                            | `GET /`                                    | `https://api.stacspec.org/v1.0.0/item-search#sortables`            | `GET /search` and `POST /search`        |
+| `GET /sortables`                                            | `GET /`                                    | `https://api.stacspec.org/v1.1.0/item-search#sortables`             | `GET /search` and `POST /search`        |
 | `GET /collections/{collectionId}/sortables`                 | `GET /collections/{collectionId}`          | `http://www.opengis.net/spec/ogcapi-features-5/1.0/conf/sortables` | `GET /collections/{collectionId}/items` |
-| `GET /...` (*Endpoint name to be chosen by implementation*) | `GET /collections`                         | `https://api.stacspec.org/v1.0.0-rc.1/collection-search#sortables` | `GET /collections/{collectionId}/items` |
+| `GET /...` (*Endpoint name to be chosen by implementation*) | `GET /collections`                         | `https://api.stacspec.org/v1.1.0/collection-search#sortables`       | `GET /collections/{collectionId}/items` |
 
 An example for a link to the sortables endpoint could be:
 
