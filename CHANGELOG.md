@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.1.0] - 2025-06-13
+
 ### Added
 
 - Sortables (e.g. endpoint `GET /sortables`)
@@ -223,7 +225,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 See the [stac-spec CHANGELOG](https://github.com/radiantearth/stac-spec/blob/v0.9.0/CHANGELOG.md)
 for STAC API releases prior to or equal to version 0.9.0.
 
-[Unreleased]: <https://github.com/stac-api-extensions/sort/compare/v1.0.0..main>
+[Unreleased]: <https://github.com/stac-api-extensions/sort/compare/v1.1.0..main>
+[v1.1.0]: <https://github.com/stac-api-extensions/sort/tree/v1.1.0>
 [v1.0.0]: <https://github.com/stac-api-extensions/sort/tree/v1.0.0>
 [v1.0.0-rc.2]: <https://github.com/stac-api-extensions/sort/tree/v1.0.0-rc.2>
 [v1.0.0-rc.1]: <https://github.com/radiantearth/stac-api-spec/tree/v1.0.0-rc.1>
