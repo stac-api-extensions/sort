@@ -126,9 +126,9 @@ All Sortables endpoints SHALL be referenced with a link with the link relation t
 
 | Sortables Endpoint                                          | Endpoint linking to the Sortables Endpoint | Conformance class                                                  | Applicable `sortby` endpoints           |
 | ----------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------ | --------------------------------------- |
-| `GET /sortables`                                            | `GET /`                                    | `https://api.stacspec.org/v1.1.0/item-search#sortables`             | `GET /search` and `POST /search`        |
+| `GET /sortables`                                            | `GET /`                                    | `https://api.stacspec.org/v1.1.0/item-search#sortables`            | `GET /search` and `POST /search`        |
 | `GET /collections/{collectionId}/sortables`                 | `GET /collections/{collectionId}`          | `http://www.opengis.net/spec/ogcapi-features-5/1.0/conf/sortables` | `GET /collections/{collectionId}/items` |
-| `GET /...` (*Endpoint name to be chosen by implementation*) | `GET /collections`                         | `https://api.stacspec.org/v1.1.0/collection-search#sortables`       | `GET /collections/{collectionId}/items` |
+| `GET /...` (*Endpoint name to be chosen by implementation*) | `GET /collections`                         | `https://api.stacspec.org/v1.1.0/collection-search#sortables`      | `GET /collections`                      |
 
 An example for a link to the sortables endpoint could be:
 
