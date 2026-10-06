@@ -50,7 +50,8 @@ the data in the order provided (e.g., first by `datetime`, then by `eo:cloud_cov
 
 When calling a relevant endpoint using GET, a single parameter `sortby` with a comma-separated list of item field names must
 be provided. The field names may be prefixed with either "+" for ascending, or "-" for descending.  If no sign is
-provided before the field name, it will be assumed to be "+". Note that `+` is used commonly
+provided before the field name, it will be assumed to be "+". Field names must not start with "+", "-" or whitespace,
+as they would be ambiguous. Note that `+` is used commonly
 by URL encoding as a space, so some tools may require escaping this literal `+` with a URL encoding of `%2B`.  
 
 Examples of `sortby` parameter:
