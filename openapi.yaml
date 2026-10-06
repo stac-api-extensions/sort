@@ -128,8 +128,14 @@ components:
         "-" for descending. If no prefix is provided, "+" is assumed.
       required: false
       schema:
-        type: string
-        example: '+id,-properties.eo:cloud_cover'
+        type: array
+        minItems: 1
+        items:
+          type: string
+          pattern: '^[+-]?[^+\-\s].*$'
+        example:
+          - '+id'
+          - '-properties.eo:cloud_cover'
       style: form
       explode: false
   schemas:
