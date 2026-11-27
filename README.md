@@ -50,15 +50,22 @@ the data in the order provided (e.g., first by `datetime`, then by `eo:cloud_cov
 
 When calling a relevant endpoint using GET, a single parameter `sortby` with a comma-separated list of item field names must
 be provided. The field names may be prefixed with either "+" for ascending, or "-" for descending.  If no sign is
-provided before the field name, it will be assumed to be "+". Note that `+` is used commonly
-by URL encoding as a space, so some tools may require escaping this literal `+` with a URL encoding of `%2B`.  
+provided before the field name, it will be assumed to be "+".
+
+> **Caution:** Query string parsers intended for Web forms decode a `+` that is not percent-encoded as a space
+> (following `application/x-www-form-urlencoded`). Many toolkits also offer decoders for generic URIs that pass the `+`
+> through as data, for example
+> [`decodeURIComponent()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent)
+> in JavaScript and [`urllib.parse.unquote()`](https://docs.python.org/3/library/urllib.parse.html#urllib.parse.unquote)
+> in Python. To ensure broad interoperability, clients ideally encode the `+` sign as `%2B`
+> (e.g., `sortby=%2Bproperties.created`) or omit it, as ascending is the default.
 
 Examples of `sortby` parameter:
 
 1. `GET /search?sortby=properties.created`
-2. `GET /search?sortby=+properties.created`
+2. `GET /search?sortby=%2Bproperties.created`
 3. `GET /search?sortby=properties.created,-id`
-4. `GET /search?sortby=+properties.created,-id`
+4. `GET /search?sortby=%2Bproperties.created,-id`
 5. `GET /search?sortby=-properties.eo:cloud_cover`
 
 Note that examples 1 and 2 are symantically equivalent, as well as examples 3 and 4.
